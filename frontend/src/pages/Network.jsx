@@ -8,6 +8,9 @@ import { useEffect } from "react";
 import dp from "../assets/dp.webp";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { RxCrossCircled } from "react-icons/rx";
+import io from "socket.io-client"
+
+const socket = io("https://linkedin-backend-excd.onrender.com")
 
 function Network() {
   let { serverUrl } = useContext(authDataContext);
