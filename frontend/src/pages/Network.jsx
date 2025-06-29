@@ -14,6 +14,8 @@ function Network() {
   let [connections, setConnections] = useState([]);
 
   const handleGetRequests = async () => {
+    // Function to fetch connection requests from the server
+    // This function will be called when the component mounts
     try {
       let result = await axios.get(`${serverUrl}/api/connection/requests`, {
         withCredentials: true,
@@ -24,41 +26,60 @@ function Network() {
     }
   };
 
-  const handleAcceptConncetion = async(requestId)=>{
+  const handleAcceptConncetion = async (requestId) => {
+    // Function to accept a connection request
+    // This function will be called when the user clicks on the accept button
     try {
-        let result = await axios.put(`${serverUrl}/api/connection/accept/${requestId}`,{}, {
-        withCredentials: true,
-    });
-setConnections(connections.filter((con)=>con._id==requestId))
-} catch (error) {
-        
-    }
-  }
-  const handleRejectConncetion = async(requestId)=>{
-    try {
-        let result = await axios.put(`${serverUrl}/api/connection/reject/${requestId}`, {
-        withCredentials: true,
-      });
-      setConnections(connections.filter((con)=>con._id==requestId))
+      let result = await axios.put(
+        `${serverUrl}/api/connection/accept/${requestId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      setConnections(connections.filter((con) => con._id == requestId));
     } catch (error) {
-        
+
+
     }
-  }
+  };
+
+  const handleRejectConncetion = async (requestId) => {
+    // Function to reject a connection request
+    // This function will be called when the user clicks on the reject button
+    try {
+      // Sending a PUT request to the server to reject the connection request
+      // The requestId is passed in the URL to identify which request to reject
+      let result = await axios.put(
+        `${serverUrl}/api/connection/reject/${requestId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      // Filter out the rejected connection from the state
+      // This will remove the connection from the UI without needing to refetch
+      setConnections(connections.filter((con) => con._id == requestId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
+    // Fetching the connection requests when the component mounts
+    // This will run only once when the component is mounted
     handleGetRequests();
-  }, []);
+  }, [connections]);
 
   return (
-    <div className="w-screen h-[100vh] bg-[white] pt-[100px] px-[20px] flex flex-col items-center gap-[40px] ">
+    <div className="w-screen h-[100vh] bg-[#f0efe7] pt-[100px] px-[20px] flex flex-col items-center gap-[40px] ">
       {/* <h1>Network</h1> */}
       <Nav />
       <div className="w-full h-[100px] bg-white shadow-lg rounded-lg flex items-center p-[10px] text-[22px] text-gray-600 ">
         Invitations {connections.length}
       </div>
 
-      {connections.length > 0 && (
-        <div className="w-[100%] max-w-[900px] shadow-lg rounded-lg flex flex-col gap-[20px] min-h-[100px] ">
+      {connections.length  > 0 && (
+        <div className="w-[100%] max-w-[900px] shadow-lg bg-white rounded-lg flex flex-col gap-[20px] min-h-[100px] ">
           {connections.map((connection, index) => (
             <div
               key={index}
@@ -79,11 +100,17 @@ setConnections(connections.filter((con)=>con._id==requestId))
               </div>
               {/* button */}
               <div>
-                <button className="text-[#18c5ff] font-semibold " onClick={()=>handleAcceptConncetion(connection._id)}>
+                <button
+                  className="text-[#18c5ff] font-semibold "
+                  onClick={() => handleAcceptConncetion(connection._id)}
+                >
                   <IoIosCheckmarkCircleOutline className="w-[40px] h-[40px]" />
                 </button>
                 <button className="text-[#ff4218] font-semibold">
-                  <RxCrossCircled className="w-[36px] h-[36px]"onClick={()=>handleRejectConncetion(connection._id)} />
+                  <RxCrossCircled
+                    className="w-[36px] h-[36px]"
+                    onClick={() => handleRejectConncetion(connection._id)}
+                  />
                 </button>
               </div>
             </div>

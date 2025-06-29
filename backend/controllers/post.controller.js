@@ -4,6 +4,7 @@
 import Post from "../models/post.model.js";
 import uploadOnCloudinary from "../config/cloudinary.js";
 import { io } from "../index.js";
+import Notification from "../models/notification.model.js";
 
 export const createPost = async (req, res) => {
   try {
@@ -39,11 +40,10 @@ export const getPost = async (req, res) => {
     //you forget await
 
     const post = await Post.find()
-      .populate("author", "firstName lastName profileImage headline")
-      .populate("comment.user", "firstName lastName profileImage headline") //when refersh, all username and commnet are diplayed
+      .populate("author", "firstName lastName profileImage headline userName")
+      .populate("comment.user", "firstName lastName profileImage headline ") //when refersh, all username and commnet are diplayed
       .sort({ createdAt: -1 }); // // Latest posts first, spell mistake in profileImage
     return res.status(200).json(post);
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -87,9 +87,18 @@ export const like = async (req, res) => {
     //user already liked it or not
     if (post.like.includes(userId)) {
       post.like = post.like.filter((id) => id != userId);
-    } 
-    else {
+    } else {
       post.like.push(userId);
+      //ehwn like, send notification
+      if(post.author != userId ){
+      let notification = await Notification.create({
+        //whom to send
+        receiver: post.author,
+        type:"like", 
+        relatedUser: userId,
+        relatedPost:postId,
+      })
+    }
     }
 
     //save after updating
@@ -103,14 +112,12 @@ export const like = async (req, res) => {
     });
 
     return res.status(200).json(post);
-
   } catch (error) {
     return res.status(500).json({
       message: "Like error",
     });
   }
 };
-
 
 export const comment = async (req, res) => {
   try {
@@ -125,6 +132,14 @@ export const comment = async (req, res) => {
       },
       { new: true }
     ).populate("comment.user", "firstName lastName profileImage headline");
+    if(post.author != userId ){
+    let notification = await Notification.create({
+        //whom to send
+        receiver: post.author,
+        type:"comment", 
+        relatedUser: userId,  //who commented
+        relatedPost:postId,
+      })}
     // .sort()
     //populate
     // 🔥 Real-time comment update
@@ -134,7 +149,6 @@ export const comment = async (req, res) => {
     });
 
     return res.status(200).json(post);
-    
   } catch (error) {
     return res.status(500).json({
       message: "Comment error",

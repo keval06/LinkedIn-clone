@@ -6,20 +6,18 @@ import { FaRegCommentDots } from "react-icons/fa6";
 import { BiSolidLike } from "react-icons/bi";
 import axios from "axios";
 import { authDataContext } from "../context/AuthContext";
-import { userDataContext } from "../context/userContext";
+import { socket, userDataContext } from "../context/userContext";
 import { LuSendHorizontal } from "react-icons/lu";
-import { io } from "socket.io-client";
 import ConnectionButton from "./ConnectionButton";
-
-let socket = io("http://localhost:8000");
 
 function Post({ id, author, like, comment, image, description, createdAt }) {
   let [more, setMore] = useState(false);
   let { serverUrl } = useContext(authDataContext);
-  let [likes, setLikes] = useState(like || []);
-  let { userData, setUserData, getPost } = useContext(userDataContext);
+  let [likes, setLikes] = useState([]);
+  let { userData, setUserData, getPost, handleGetProfile } =
+    useContext(userDataContext);
   let [commentContent, setCommentContent] = useState("");
-  let [comments, setComments] = useState(comment || []);
+  let [comments, setComments] = useState([]);
   let [showComment, setShowComment] = useState(false);
   // let [likeCount,setLikeCount] = useState("")
 
@@ -71,23 +69,24 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
         setComments(comm);
       }
     });
-    return ()=>{
-      socket.off("likeUpdated")
-      socket.off("commentAdded")
-    }
+    return () => {
+      socket.off("likeUpdated");
+      socket.off("commentAdded");
+    };
   }, [id]);
 
   useEffect(() => {
-    getPost();
-    // console.log(comments);
-    console.log("✅ comments state updated:", comments);
-    // setComments("");
-  }, [likes, setLikes, comments]);
+    setLikes(like);
+    setComments(comment);
+  }, [like, comment]);
 
   return (
     <div className="w-full min-h-[200px] bg-white rounded-lg shadow-lg p-[10px] flex flex-col gap-[20px] ">
       <div className="flex justify-between items-center ">
-        <div className="flex justify-center items-start gap-[10px]  ">
+        <div
+          className="flex justify-center items-start gap-[10px]"
+          onClick={() => handleGetProfile(author.userName)}
+        >
           {/* Profile img */}
           <div className="w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center cursor-pointer  ">
             <img src={author.profileImage || dp} alt="" className=" h-full " />
@@ -108,8 +107,9 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
         </div>
 
         <div>
-          {userData._id !== author._id && <ConnectionButton userId={author._id} />}
-          
+          {userData._id !== author._id && (
+            <ConnectionButton userId={author._id} />
+          )}
         </div>
         {/* Description */}
       </div>

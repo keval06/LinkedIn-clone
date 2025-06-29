@@ -378,7 +378,7 @@ function EditProfile() {
                       <div> Description : {exp.description} </div>
                     </div>
                     <RxCross2
-                      className="w-[20px] h-[20px] text-gray-700 font-bold cursor-pointer"
+                      className="w-[25px] h-[25px] text-gray-800 font-bold cursor-pointer"
                       onClick={() => removeExperience(exp)}
                     />
                   </div>

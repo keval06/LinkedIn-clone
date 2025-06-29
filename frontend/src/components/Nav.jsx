@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import logo2 from "../assets/logo2.png";
 import { IoSearchOutline } from "react-icons/io5";
 import { TiHome } from "react-icons/ti";
@@ -12,10 +12,12 @@ import { useNavigate } from "react-router-dom";
 
 function Nav() {
   let [activeSearch, setActiveSearch] = useState(false);
-  let { userData, setUserData } = useContext(userDataContext);
+  let { userData, setUserData, handleGetProfile } = useContext(userDataContext);
   let { serverUrl } = useContext(authDataContext);
   let navigate = useNavigate();
   let [showPopup, setShowPopup] = useState(false);
+  let [searchInput, setSearchInput] = useState("");
+  let [searchData, setSearchData] = useState([]);
 
   const handleSignOut = async () => {
     try {
@@ -30,11 +32,35 @@ function Nav() {
     }
   };
 
+  const handleSearch = async () => {
+    try {
+      let result = await axios.get(
+        `${serverUrl}/api/user/search?query=${searchInput}`,
+        {
+          withCredentials: true,
+        }
+      );
+      setSearchData(result.data);
+    } catch (error) {
+      setSearchData([])
+    }
+  };
+
+  useEffect(() => {
+    
+      handleSearch();
+  }, [searchInput]);
+
   return (
-    <div className="w-full h-[80px] bg-[white] fixed top-0 left-0 shadow-lg flex md:justify-around justify-between items-center px-[10px] z-[80]">
+    <div className="w-full h-[80px] bg-[white] fixed top-0 left-0 shadow-lg flex md:justify-around justify-between items-center px-[10px] z-[80] ">
       {/* Left Div, logo,search bar, input */}
-      <div className="flex justify-center items-center gap-[10px] ">
-        <div onClick={() => setActiveSearch(false)}>
+      <div className="flex justify-center items-center gap-[10px]">
+        <div
+          onClick={() => {
+            setActiveSearch(false);
+            navigate("/");
+          }}
+        >
           <img src={logo2} alt="" className="w-[50px] cursor-pointer" />
         </div>
         {!activeSearch && (
@@ -43,6 +69,34 @@ function Nav() {
               className="w-[23px] h-[23px] text-gray-600 cursor-pointer lg:hidden "
               onClick={() => setActiveSearch(true)}
             />
+          </div>
+        )}
+
+        {/* Search input */}
+        {searchData.length>0 && (
+          <div className="absolute top-[90px] min-h-[100px] left-[0px] w-[100%] lg:left-[20px] md:w-[700px]  bg-white shadow-lg flex flex-col gap-[20px] p-[20px] h-[500px] overflow-auto  "
+          >
+            {searchData.map((sea) => (
+              <div className="flex gap-[20px] items-center border-b-2 border-b-gray-300 p-[10px] cursor-pointer hover:bg-gray-200  rounded-lg"
+              onClick={()=>handleGetProfile(sea.userName)}>
+                <div className="w-[70px] h-[70px] rounded-full overflow-hidden ">
+                  <img
+                    src={sea.profileImage || dp}
+                    alt=""
+                    className="w-fit h-fit"
+                  />
+                </div>
+                <div>
+                  <div className="text-[19px] font-semibold text-gray-700 ">
+                    {`${sea.firstName} ${sea.lastName} `}
+                  </div>
+
+                  <div className="text-[15px] font-semibold text-gray-700 ">
+                    {`${sea.headline} `}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
@@ -56,27 +110,36 @@ function Nav() {
           </div>
           <input
             type="text"
-            className="w-[80%] h-full bg-transparent outline-none border-0 "
+            className="w-full h-full bg-transparent outline-none border-0 "
             placeholder="Seacrh User..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
         </form>
       </div>
 
       {/* Right dive */}
-      <div className="flex justify-center items-center gap-[20px] relative">
+      <div className="flex justify-center items-center gap-[20px] ">
         {/* Pop up Card */}
         {showPopup && (
-          <div className="w-[300px] min-h-[300px] bg-white shadow-lg absolute top-[75px] rounded-lg flex flex-col items-center p-[20px] gap-[20px] ">
+          <div className="w-[300px] min-h-[300px] bg-white shadow-lg absolute top-[75px] rounded-lg flex flex-col items-center p-[20px] gap-[20px] right-[20px] lg:right-[100px] ">
             {/* IMG */}
             <div className="w-[70px] h-[70px] rounded-full overflow-hidden ">
-              <img src={userData.profileImage || dp} alt=""  className="w-full h-full" />
+              <img
+                src={userData.profileImage || dp}
+                alt=""
+                className="w-full h-full"
+              />
             </div>
 
             {/* Username */}
             <div className="text-[19px] font-semibold text-gray-700 ">
               {`${userData.firstName} ${userData.lastName} `}{" "}
             </div>
-            <button className="w-[100%] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  ">
+            <button
+              className="w-[100%] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  "
+              onClick={() => handleGetProfile(userData.userName)}
+            >
               View Profile
             </button>
             <div className="w-full h-[1px] bg-gray-700"></div>
@@ -98,8 +161,10 @@ function Nav() {
           </div>
         )}
 
-        <div className="lg:flex flex-col items-center justify-cente cursor-pointer text-gray-600 hidden"
-        onClick={()=>navigate("/")}>
+        <div
+          className="lg:flex flex-col items-center justify-cente cursor-pointer text-gray-600 hidden"
+          onClick={() => navigate("/")}
+        >
           <TiHome className="w-[23px] h-[23px] text-gray-600 " />
           <div>Home</div>
         </div>
@@ -110,7 +175,8 @@ function Nav() {
           <FaUserGroup className="w-[23px] h-[23px] text-gray-600 " />
           <div>My Network</div>
         </div>
-        <div className="flex flex-col items-center justify-cente cursor-pointer text-gray-600  ">
+        <div className="flex flex-col items-center justify-cente cursor-pointer text-gray-600  "
+        onClick={()=>navigate("/notification")}>
           <IoMdNotifications className="w-[23px] h-[23px] text-gray-600 " />
           <div className="hidden md:block ">Notifications</div>
         </div>
@@ -118,7 +184,11 @@ function Nav() {
           className="w-[50px] h-[50px] rounded-full overflow-hidden cursor-pointer transition-all"
           onClick={() => setShowPopup((prev) => !prev)}
         >
-          <img src={userData.profileImage || dp} alt="" className="w-full h-full" />
+          <img
+            src={userData.profileImage || dp}
+            alt=""
+            className="w-full h-full"
+          />
         </div>
       </div>
     </div>

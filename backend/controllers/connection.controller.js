@@ -1,5 +1,6 @@
 import { io, userSocketMap } from "../index.js";
 import Connection from "../models/connection.model.js";
+import Notification from "../models/notification.model.js";
 import User from "../models/user.model.js";
 
 export const sendConnection = async (req, res) => {
@@ -75,7 +76,7 @@ export const acceptConnection = async (req, res) => {
   try {
     let { connectionId } = req.params;
     let connection = await Connection.findById(connectionId);
-
+    let userId = req.userId;
     if (!connection) {
       return res.status(400).json({
         message: "Connection does not exists",
@@ -90,6 +91,12 @@ export const acceptConnection = async (req, res) => {
 
     //accept the connection
     connection.status = "accepted";
+    let notification = await Notification.create({
+        //whom to send
+        receiver: connection.sender, //aapde j receiver, je connection mokle e receiver
+        type:"connectionAccepted", 
+        relatedUser: userId,  //who commented
+       })
     await connection.save();
 
     //./ who accepts request

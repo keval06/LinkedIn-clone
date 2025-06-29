@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Nav from "../components/Nav";
 import dp from "../assets/dp.webp";
 import { FiPlus } from "react-icons/fi";
@@ -14,8 +14,18 @@ import { authDataContext } from "../context/AuthContext";
 import Post from "../components/Post";
 
 function Home() {
-  let { userData, setUserData, edit, setEdit, postData, setPostData } =
-    useContext(userDataContext);
+  let {
+    userData,
+    setUserData,
+    edit,
+    setEdit,
+    postData,
+    profilkeData,
+    setProfileData,
+    handleGetProfile,
+    setPostData,
+    getPost,
+  } = useContext(userDataContext);
 
   let { serverUrl } = useContext(authDataContext);
 
@@ -24,6 +34,7 @@ function Home() {
   let [description, setDescription] = useState("");
   let [uploadPost, setUploadPost] = useState(false);
   let [posting, setPosting] = useState(false);
+  let [suggestedUser, setSuggestedUser] = useState([]);
 
   let image = useRef();
 
@@ -60,6 +71,26 @@ function Home() {
       console.log(error);
     }
   }
+
+  const handleSuggestedUser = async () => {
+    try {
+      let result = await axios.get(`${serverUrl}/api/user/suggestedusers`, {
+        withCredentials: true,
+      });
+      console.log(result.data);
+      setSuggestedUser(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    handleSuggestedUser();
+  }, [uploadPost]);
+
+  useEffect(() => {
+    getPost();
+  }, [uploadPost]);
 
   return (
     <div className="w-full min-h-[100vh] bg-[#f0efe7] pt-[100px] flex lg:items-start items-center lg:justify-center gap-[20px] px-[20px] flex-col lg:flex-row relative pb-[50px] ">
@@ -117,7 +148,7 @@ function Home() {
       )}
 
       {uploadPost && (
-        <div className="w-[90%] max-w-[500px] h-[600px] bg-white fixed z-[200] shadow-lg rounded-lg p-[20px] flex justify-start items-start flex-col gap-[20px] mt-[30px] ml-auto mr-auto">
+        <div className="w-[90%] max-w-[500px] h-[600px] bg-white fixed z-[200] shadow-lg top-[100px] rounded-lg p-[20px] flex justify-start items-start flex-col gap-[20px] mt-[30px] ml-auto mr-auto">
           {/* cross */}
           <div className="absolute top-[20px] right-[20px] cursor-pointer ">
             <RxCross2
@@ -227,8 +258,37 @@ function Home() {
         ))}
       </div>
 
-      <div className="lg:w-[25%] w-full min-h-[200px] bg-[white] shadow-lg ">
-        right
+      <div className=" w-full lg:w-[25%] min-h-[200px] bg-[white] shadow-lg hidden lg:flex flex-col p-[20px] ">
+        <h1 className="text-[20px] text-gray-600 font-semibold  ">
+          Suggested User
+        </h1>
+        {suggestedUser.length > 0 && (
+          <div className="flex flex-col gap-[10px]">
+            {suggestedUser.map((sugg) => (
+              <div className="flex items-center gap-[10px] shadow-sm mt-[10px] rounded-lg p-[5px] hover:bg-gray-200 cursor-pointer "
+              onClick={()=>handleGetProfile(sugg.userName)} >
+                <div className="w-[40px] h-[40px] rounded-full overflow-hidden ">
+                  <img
+                    src={sugg.profileImage || dp}
+                    alt=""
+                    className="w-fit h-fit"
+                  />
+                </div>
+                <div>
+                  <div className="text-[19px] font-semibold text-gray-700 ">
+                    {`${sugg.firstName} ${sugg.lastName} `}
+                  </div>
+
+                  <div className="text-[12px] font-semibold text-gray-700 ">
+                    {`${sugg.headline} `}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {suggestedUser.length == 0 &&
+         <div>No suggested User</div>}
       </div>
     </div>
   );
