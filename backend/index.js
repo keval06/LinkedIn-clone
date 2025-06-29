@@ -20,15 +20,36 @@ let server = http.createServer(app); //socket
 dotenv.config();
 
 app.use(express.json()); //we forget this, middlewre
+
 app.use(cookieParser()); //some middleware
+
 app.use(
   cors({
-    origin: "https://linkedin-clone-pnv4.onrender.com",
+    origin: [
+      "https://linkedin-clone-pnv4.onrender.com",
+      "http://localhost:3000",
+      "http://localhost:3001"
+    ],
+
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
 let port = process.env.PORT || 5000;
+
+// Health check route
+app.get("/", (req, res) => {
+  res.json({
+    message: "LinkedIn Clone Backend is running!",
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get("/api", (req, res) => {
+  res.json({ message: "API is working!" });
+});
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
@@ -36,6 +57,14 @@ app.use("/api/post", postRouter);
 app.use("/api/connection", connectionRouter);
 app.use("/api/notification", notificationRouter);
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: 'Something went wrong!',
+    message: process.env.NODE_ENVIRONMENT === 'development' ? err.message : 'Internal server error'
+  });
+});
 // app.get("/", (req, res) => {
 //   res.send("Hello");
 //   // res.json({
@@ -45,9 +74,13 @@ app.use("/api/notification", notificationRouter);
 
   //websocket server
 
-  export const io = new Server(server, {
+export const io = new Server(server, {
   cors: {
-    origin: "https://linkedin-clone-pnv4.onrender.com", // React app URL
+    origin: [
+      "https://linkedin-clone-pnv4.onrender.com",
+      "http://localhost:3000",
+      "http://localhost:3001"
+    ], // React app URL
     credentials: true,
   },
 });
@@ -64,12 +97,28 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", (socket) => {
     // console.log("User Disconnected", socket.id);
+        // Remove user from socket map when disconnected
+
+    for (let [userId, socketId] of userSocketMap.entries()) {
+      if (socketId === socket.id) {
+        userSocketMap.delete(userId);
+        break;
+      }
+    }
   });
 });
+
+//// For Vercel - export the app
+export default app;
 
 server.listen(port, async () => {
   await connectDb();
   console.log("Server started");
 });
 
-//http://localhost:8000/api/auth/signUp
+// For local development
+// if (process.env.NODE_ENVIRONMENT !== 'production') {
+//   server.listen(port, () => {
+//     console.log(`Server started on port ${port}`);
+//   });
+// }
