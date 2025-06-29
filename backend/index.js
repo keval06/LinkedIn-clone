@@ -23,7 +23,7 @@ app.use(express.json()); //we forget this, middlewre
 app.use(cookieParser()); //some middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://linkedin-clone-pnv4.onrender.com",
     credentials: true,
   })
 );
@@ -47,7 +47,7 @@ app.use("/api/notification", notificationRouter);
 
   export const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // React app URL
+    origin: "https://linkedin-clone-pnv4.onrender.com", // React app URL
     credentials: true,
   },
 });
