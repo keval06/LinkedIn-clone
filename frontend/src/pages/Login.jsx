@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import { authDataContext } from "../context/AuthContext";
+import { authDataContext } from "../context/AuthContext.jsx";
 import axios from "axios";
-import { userDataContext } from "../context/userContext";
+import { userDataContext } from "../context/UserContext.jsx";
 
 function Login() {
   let [show, setShow] = useState(false);

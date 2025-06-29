@@ -1,10 +1,10 @@
 import React, { use, useContext, useRef, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { userDataContext } from "../context/userContext";
+import { userDataContext } from "../context/UserContext.jsx";
 import dp from "../assets/dp.webp";
 import { FiCamera, FiPlus } from "react-icons/fi";
 import axios from "axios";
-import { authDataContext } from "../context/AuthContext";
+import { authDataContext } from "../context/AuthContext.jsx";
 
 function EditProfile() {
   let { edit, setEdit, userData, setUserData } = useContext(userDataContext);

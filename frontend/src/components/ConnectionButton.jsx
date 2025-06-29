@@ -1,10 +1,10 @@
 import React from "react";
 import { useContext } from "react";
-import { authDataContext } from "../context/AuthContext";
+import { authDataContext } from "../context/AuthContext.jsx";
 import axios from "axios";
 import { useEffect } from "react";
 import io from "socket.io-client";
-import { userDataContext } from "../context/userContext";
+import { userDataContext } from "../context/UserContext.jsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

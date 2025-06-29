@@ -1,7 +1,7 @@
 import React from "react";
 import Nav from "../components/Nav";
 import { useContext } from "react";
-import { authDataContext } from "../context/AuthContext";
+import { authDataContext } from "../context/AuthContext.jsx";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";

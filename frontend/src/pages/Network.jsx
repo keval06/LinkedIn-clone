@@ -2,7 +2,7 @@ import React from "react";
 import Nav from "../components/Nav";
 import axios from "axios";
 import { useContext } from "react";
-import { authDataContext } from "../context/AuthContext";
+import { authDataContext } from "../context/AuthContext.jsx";
 import { useState } from "react";
 import { useEffect } from "react";
 import dp from "../assets/dp.webp";

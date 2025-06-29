@@ -5,8 +5,8 @@ import { BiLike } from "react-icons/bi";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { BiSolidLike } from "react-icons/bi";
 import axios from "axios";
-import { authDataContext } from "../context/AuthContext";
-import { socket, userDataContext } from "../context/userContext";
+import { authDataContext } from "../context/AuthContext.jsx";
+import { socket, userDataContext } from "../context/UserContext.jsx";
 import { LuSendHorizontal } from "react-icons/lu";
 import ConnectionButton from "./ConnectionButton";
 
