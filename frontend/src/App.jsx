@@ -1,12 +1,12 @@
 import React, { useContext } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Home from './pages/home'
+import Home from './pages/Home.jsx'
 import SignUp from './pages/Signup'
 import Login from './pages/Login'
-import { userDataContext } from './context/userContext'
-import Network from './pages/Network'
-import Profile from './pages/Profile'
-import Notification from './pages/Notification'
+import { userDataContext } from './context/UserContext.jsx'
+import Network from './pages/Network.jsx'
+import Profile from './pages/Profile.jsx'
+import Notification from './pages/Notification.jsx'
 
 function App() {
   let {userData} = useContext(userDataContext);
