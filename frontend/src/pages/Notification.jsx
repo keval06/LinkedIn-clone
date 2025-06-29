@@ -1,5 +1,5 @@
 import React from "react";
-import Nav from "../components/Nav";
+import Nav from "../components/Nav.jsx";
 import { useContext } from "react";
 import { authDataContext } from "../context/AuthContext.jsx";
 import { useState } from "react";

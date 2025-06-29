@@ -137,7 +137,7 @@ function Nav() {
               {`${userData.firstName} ${userData.lastName} `}{" "}
             </div>
             <button
-              className="w-[100%] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  "
+              className="w-[100%] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff] hover:text-white hover:bg-[#2dc0ff] transition-all  "
               onClick={() => handleGetProfile(userData.userName)}
             >
               View Profile
@@ -153,7 +153,7 @@ function Nav() {
             </div>
 
             <button
-              className="w-[100%] h-[40px] rounded-full border-2 border-[#ec4545] text-[#ec4545] "
+              className="w-[100%] h-[40px] rounded-full border-2 border-[#ec4545] text-[#ec4545] hover:text-white hover:bg-[#ec4545] transition-all "
               onClick={handleSignOut}
             >
               Sign Out

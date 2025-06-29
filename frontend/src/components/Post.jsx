@@ -8,7 +8,7 @@ import axios from "axios";
 import { authDataContext } from "../context/AuthContext.jsx";
 import { socket, userDataContext } from "../context/UserContext.jsx";
 import { LuSendHorizontal } from "react-icons/lu";
-import ConnectionButton from "./ConnectionButton";
+import ConnectionButton from "./ConnectionButton.jsx";
 
 function Post({ id, author, like, comment, image, description, createdAt }) {
   let [more, setMore] = useState(false);

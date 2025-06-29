@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import Nav from "../components/Nav";
+import Nav from "../components/Nav.jsx";
 import dp from "../assets/dp.webp";
 import { FiPlus } from "react-icons/fi";
 import { FiCamera } from "react-icons/fi";
 import { userDataContext } from "../context/UserContext.jsx";
 import { RiPencilFill } from "react-icons/ri";
-import EditProfile from "../components/EditProfile";
+import EditProfile from "../components/EditProfile.jsx";
 import { RxCross2 } from "react-icons/rx";
 import { BsImage } from "react-icons/bs";
 import { useRef } from "react";
 import axios from "axios";
 import { authDataContext } from "../context/AuthContext.jsx";
-import Post from "../components/Post";
+import Post from "../components/Post.jsx";
 
 function Home() {
   let {

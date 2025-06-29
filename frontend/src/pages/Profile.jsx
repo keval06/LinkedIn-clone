@@ -1,15 +1,15 @@
 import React, { useContext, useEffect } from "react";
-import Nav from "../components/Nav";
+import Nav from "../components/Nav.jsx";
 import dp from "../assets/dp.webp";
 import { useState } from "react";
 import { FiCamera, FiPlus } from "react-icons/fi";
 import { RiPencilFill } from "react-icons/ri";
 import { userDataContext } from "../context/UserContext.jsx";
-import EditProfile from "../components/EditProfile";
+import EditProfile from "../components/EditProfile.jsx";
 import { authDataContext } from "../context/AuthContext.jsx";
 import axios from "axios";
-import Post from "../components/Post";
-import ConnectionButton from "../components/ConnectionButton";
+import Post from "../components/Post.jsx";
+import ConnectionButton from "../components/ConnectionButton.jsx";
 
 function Profile() {
   let {
