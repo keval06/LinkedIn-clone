@@ -8,7 +8,7 @@ import { userDataContext } from "../context/UserContext.jsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const socket = io("https://linked-in-clone-backend-sigma.vercel.app");
+const socket = io("https://linkedin-backend-excd.onrender.com");
 
 function ConnectionButton({ userId }) {
   let { serverUrl } = useContext(authDataContext);

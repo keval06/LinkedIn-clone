@@ -3,7 +3,7 @@ import React, { createContext } from "react";
 export const authDataContext = createContext();
 
 function AuthContext({ children }) {
-  const serverUrl = "https://linked-in-clone-backend-sigma.vercel.app";
+  const serverUrl = "https://linkedin-backend-excd.onrender.com";
 
   let value = {
     serverUrl,

@@ -10,7 +10,7 @@ import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { RxCrossCircled } from "react-icons/rx";
 import io from "socket.io-client"
 
-const socket = io("https://linked-in-clone-backend-sigma.vercel.app")
+const socket = io("https://linkedin-backend-excd.onrender.com")
 
 function Network() {
   let { serverUrl } = useContext(authDataContext);
