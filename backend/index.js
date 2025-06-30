@@ -124,7 +124,7 @@ server.listen(port, async () => {
 });
 
 // For deployment platforms that expect app export
-module.exports = {app, io, userSocketMap};
+export {app, io, userSocketMap};
 // For local development
 // if (process.env.NODE_ENVIRONMENT !== 'production') {
 //   server.listen(port, () => {
