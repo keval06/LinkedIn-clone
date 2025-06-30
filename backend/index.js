@@ -26,7 +26,7 @@ app.use(cookieParser()); //some middleware
 app.use(
   cors({
     origin: [
-      "https://linked-in-clone-frontend-zeta.vercel.app",
+      "https://linkedin-clone-pnv4.onrender.com",
       "http://localhost:3000",
       "http://localhost:3001"
     ],
@@ -77,7 +77,7 @@ app.use((err, req, res, next) => {
 export const io = new Server(server, {
   cors: {
     origin: [
-      "https://linked-in-clone-frontend-zeta.vercel.app",
+      "https://linkedin-clone-pnv4.onrender.com",
       "http://localhost:3000",
       "http://localhost:3001"
     ], // React app URL
