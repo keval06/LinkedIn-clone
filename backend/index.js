@@ -110,17 +110,20 @@ io.on("connection", (socket) => {
 // Start server
 server.listen(port, async () => {
   try {
+    console.log(`Server attempting to start on port ${port}`);
     await connectDb();
+    console.log(`Database connected successfully`);
     console.log(`Server started on port ${port}`);
     console.log(`Socket.IO server ready`);
   } catch (error) {
     console.error("Failed to start server:", error);
+    console.error("Error details:", error.message);
     process.exit(1);
   }
 });
 
 // For deployment platforms that expect app export
-export default app;
+module.exports = {app, io, userSocketMap};
 // For local development
 // if (process.env.NODE_ENVIRONMENT !== 'production') {
 //   server.listen(port, () => {
