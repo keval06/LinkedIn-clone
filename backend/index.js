@@ -38,6 +38,8 @@ app.use(
 );
 
 let port = process.env.PORT || 5000;
+//store user socket connections
+export const userSocketMap = new Map();
 
 // Health check route
 app.get("/", (req, res) => {
@@ -93,7 +95,6 @@ export const io = new Server(server, {
 });
 
 // Store user socket connections,   connection mate socket
-export const userSocketMap = new Map();
 
 io.on("connection", (socket) => {
   console.log("User Connected:", socket.id);
@@ -106,7 +107,7 @@ io.on("connection", (socket) => {
       console.log("Active connections:", userSocketMap.size);
     }
   });
-
+});
 // Start server
 server.listen(port, async () => {
   try {
