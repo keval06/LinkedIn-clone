@@ -124,7 +124,7 @@ server.listen(port, async () => {
 });
 
 // For deployment platforms that expect app export
-export {app, io};
+export {app};
 // For local development
 // if (process.env.NODE_ENVIRONMENT !== 'production') {
 //   server.listen(port, () => {
