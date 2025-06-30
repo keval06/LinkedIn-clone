@@ -43,7 +43,8 @@ let port = process.env.PORT || 5000;
 app.get("/", (req, res) => {
   res.json({
     message: "LinkedIn Clone Backend is running!",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    socketConnections: userSocketMap.size
   });
 });
 
@@ -51,6 +52,7 @@ app.get("/api", (req, res) => {
   res.json({ message: "API is working!" });
 });
 
+// API Routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
@@ -82,40 +84,43 @@ export const io = new Server(server, {
       "http://localhost:3001"
     ], // React app URL
     credentials: true,
+   methods: ["GET", "POST"],
+    allowEIO3: true, // For better compatibility
   },
+   transports: ['websocket', 'polling'], // Explicitly define transports
+  pingTimeout: 60000,
+  pingInterval: 25000,
 });
+
 // Store user socket connections,   connection mate socket
 export const userSocketMap = new Map();
 
 io.on("connection", (socket) => {
-//   console.log("User Connected", socket.id);
-  //send userId. / User registers their socket
+  console.log("User Connected:", socket.id);
+  
+  // User registers their socket
   socket.on("register", (userId) => {
-    userSocketMap.set(userId, socket.id);
-    // console.log(userSocketMap);
-  });
-
-  socket.on("disconnect", (socket) => {
-    // console.log("User Disconnected", socket.id);
-        // Remove user from socket map when disconnected
-
-    for (let [userId, socketId] of userSocketMap.entries()) {
-      if (socketId === socket.id) {
-        userSocketMap.delete(userId);
-        break;
-      }
+    if (userId) {
+      userSocketMap.set(userId, socket.id);
+      console.log(`User ${userId} registered with socket ${socket.id}`);
+      console.log("Active connections:", userSocketMap.size);
     }
   });
-});
 
-//// For Vercel - export the app
-export default app;
-
+// Start server
 server.listen(port, async () => {
-  await connectDb();
-  console.log("Server started");
+  try {
+    await connectDb();
+    console.log(`Server started on port ${port}`);
+    console.log(`Socket.IO server ready`);
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
 });
 
+// For deployment platforms that expect app export
+export default app;
 // For local development
 // if (process.env.NODE_ENVIRONMENT !== 'production') {
 //   server.listen(port, () => {
