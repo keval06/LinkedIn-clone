@@ -43,7 +43,7 @@ let port = process.env.PORT || 5000;
 export const userSocketMap = new Map();
 
 // Health check route
-app.get("/", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.json({
     message: "LinkedIn Clone Backend is running!",
     timestamp: new Date().toISOString(),
