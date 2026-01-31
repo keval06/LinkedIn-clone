@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export const userDataContext = createContext();
 import { io } from "socket.io-client";
-export let socket = io("https://linked-in-clone-backend-sigma.vercel.app");
+export let socket = io("http://localhost:8000");
 
 function UserContext({ children }) {
   let [userData, setUserData] = useState(null);
@@ -79,9 +79,11 @@ function UserContext({ children }) {
     setProfileData,
   };
   return (
-    <userDataContext.Provider value={value}>
-      {children}
-    </userDataContext.Provider>
+    <div>
+      <userDataContext.Provider value={value}>
+        {children}
+      </userDataContext.Provider>
+    </div>
   );
 }
 

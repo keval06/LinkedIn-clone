@@ -1,5 +1,6 @@
 // import express from "express";
 import express from "express";
+import path from "path";
 import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import authRouter from "./routes/auth.routes.js";
@@ -25,12 +26,7 @@ app.use(cookieParser()); //some middleware
 
 app.use(
   cors({
-    origin: [
-      "https://linked-in-clone-frontend-zeta.vercel.app",
-      "http://localhost:3000",
-      "http://localhost:3001"
-    ],
-
+    origin: ["http://localhost:5173", "http://localhost:3000"], // Allow local dev
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -77,9 +73,9 @@ app.use((err, req, res, next) => {
 export const io = new Server(server, {
   cors: {
     origin: [
-      "https://linked-in-clone-frontend-zeta.vercel.app",
-      "http://localhost:3000",
-      "http://localhost:3001"
+      // "https://linked-in-clone-frontend-zeta.vercel.app",
+      // "http://localhost:3000",
+      "http://localhost:5173"
     ], // React app URL
     credentials: true,
   },
@@ -108,7 +104,19 @@ io.on("connection", (socket) => {
   });
 });
 
-//// For Vercel - export the app
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
+  });
+}
+
 export default app;
 
 server.listen(port, async () => {
@@ -121,4 +129,4 @@ server.listen(port, async () => {
 //   server.listen(port, () => {
 //     console.log(`Server started on port ${port}`);
 //   });
-// }
+// }j
