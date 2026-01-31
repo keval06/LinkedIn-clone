@@ -101,10 +101,10 @@ function ConnectionButton({ userId }) {
 
   return (
     <button
-      className={`min-w-[150px] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff] text-[16px] font-semibold px-[25px] py-[20px] items-center justify-center flex cursor-not-allowed ml-[20px] my-[20px] ${
+      className={`min-w-[150px] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff] text-[16px] font-semibold px-[25px] py-[20px] items-center justify-center flex ml-[20px] my-[20px] ${
         status == "connect"
           ? "hover:bg-[#4ec1ff] hover:text-white transition-all cursor-pointer"
-          : ""
+          : status === "pending" ? "cursor-not-allowed" : "cursor-pointer"
       }`}
       onClick={handleClick}
       disabled={status == "pending"}
