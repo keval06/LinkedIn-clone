@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export const userDataContext = createContext();
 import { io } from "socket.io-client";
-export let socket = io("http://localhost:8000");
+export let socket = io(import.meta.env.MODE === "development" ? "http://localhost:5000" : undefined);
 
 function UserContext({ children }) {
   let [userData, setUserData] = useState(null);

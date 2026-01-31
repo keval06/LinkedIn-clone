@@ -26,7 +26,12 @@ app.use(cookieParser()); //some middleware
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3000"], // Allow local dev
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://linkedin-clone-pnv4.onrender.com"
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -34,12 +39,15 @@ app.use(
 );
 
 let port = process.env.PORT || 5000;
+//store user socket connections
+export const userSocketMap = new Map();
 
 // Health check route
 app.get("/", (req, res) => {
   res.json({
     message: "LinkedIn Clone Backend is running!",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    socketConnections: userSocketMap.size
   });
 });
 
@@ -47,6 +55,7 @@ app.get("/api", (req, res) => {
   res.json({ message: "API is working!" });
 });
 
+// API Routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
@@ -73,33 +82,31 @@ app.use((err, req, res, next) => {
 export const io = new Server(server, {
   cors: {
     origin: [
-      // "https://linked-in-clone-frontend-zeta.vercel.app",
-      // "http://localhost:3000",
-      "http://localhost:5173"
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://linkedin-clone-pnv4.onrender.com"
     ], // React app URL
     credentials: true,
+   methods: ["GET", "POST"],
+    allowEIO3: true, // For better compatibility
   },
+   transports: ['websocket', 'polling'], // Explicitly define transports
+  pingTimeout: 60000,
+  pingInterval: 25000,
 });
+
 // Store user socket connections,   connection mate socket
-export const userSocketMap = new Map();
 
 io.on("connection", (socket) => {
-//   console.log("User Connected", socket.id);
-  //send userId. / User registers their socket
+  console.log("User Connected:", socket.id);
+  
+  // User registers their socket
   socket.on("register", (userId) => {
-    userSocketMap.set(userId, socket.id);
-    // console.log(userSocketMap);
-  });
-
-  socket.on("disconnect", (socket) => {
-    // console.log("User Disconnected", socket.id);
-        // Remove user from socket map when disconnected
-
-    for (let [userId, socketId] of userSocketMap.entries()) {
-      if (socketId === socket.id) {
-        userSocketMap.delete(userId);
-        break;
-      }
+    if (userId) {
+      userSocketMap.set(userId, socket.id);
+      console.log(`User ${userId} registered with socket ${socket.id}`);
+      console.log("Active connections:", userSocketMap.size);
     }
   });
 });
@@ -119,14 +126,26 @@ if (process.env.NODE_ENV === "production") {
 
 export default app;
 
+// Start server
 server.listen(port, async () => {
-  await connectDb();
-  console.log("Server started");
+  try {
+    console.log(`Server attempting to start on port ${port}`);
+    await connectDb();
+    console.log(`Database connected successfully`);
+    console.log(`Server started on port ${port}`);
+    console.log(`Socket.IO server ready`);
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    console.error("Error details:", error.message);
+    process.exit(1);
+  }
 });
 
+// For deployment platforms that expect app export
+export {app};
 // For local development
 // if (process.env.NODE_ENVIRONMENT !== 'production') {
 //   server.listen(port, () => {
 //     console.log(`Server started on port ${port}`);
 //   });
-// }j
+// }

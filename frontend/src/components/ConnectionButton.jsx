@@ -8,7 +8,7 @@ import { userDataContext } from "../context/UserContext.jsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const socket = io("http://localhost:8000");
+const socket = io(import.meta.env.MODE === "development" ? "http://localhost:5000" : undefined);
 
 function ConnectionButton({ userId }) {
   let { serverUrl } = useContext(authDataContext);
