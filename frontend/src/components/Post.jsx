@@ -19,6 +19,11 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
   let [commentContent, setCommentContent] = useState("");
   let [comments, setComments] = useState([]);
   let [showComment, setShowComment] = useState(false);
+
+  // If author was deleted from database, don't render this post
+  if (!author) {
+    return null;
+  }
   // let [likeCount,setLikeCount] = useState("")
 
   // handle like
@@ -203,6 +208,7 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
             {/* Display / Map alll comments */}
             <div className="flex flex-col gap-[10px]">
               {comments.map((com) => (
+                com.user && (
                 <div
                   key={com._id}
                   className="flex flex-col gap-[10px] border-b-2 border-b-gray-300 p-[20px] "
@@ -227,6 +233,7 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
                   {/* Content */}
                   <div className="pl-[50px]">{com.content}</div>
                 </div>
+                )
               ))}
             </div>
           </div>
