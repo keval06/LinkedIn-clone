@@ -49,10 +49,26 @@ function Profile() {
   useEffect(() => {
     // Filter the postData to get only the posts made by the current user
     // Assuming postData is an array of posts and each post has an author field that contains the author's user ID
-    setProfilePost(
-      postData.filter((post) => post.author._id == profileData._id)
-    );
+
+    if (profileData) {
+      setProfilePost(
+        postData.filter(
+          (post) => post.author && post.author._id == profileData._id,
+        ),
+      );
+    }
+    //This ensures both profileData AND post.author are valid before accessing their _id properties.
   }, [profileData]);
+
+  if (!profileData) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-[#f0efe7]">
+        <div className="text-xl font-semibold text-gray-600 animate-pulse">
+          Loading Profile...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full min-h-[100vh] bg-[#f0efe7] flex flex-col items-center pt-[100px] pb-[40px] ">
@@ -111,7 +127,7 @@ function Profile() {
           )}
 
           {profileData._id !== userData._id && (
-            <div >
+            <div>
               <ConnectionButton userId={profileData._id} />
             </div>
           )}
@@ -143,13 +159,14 @@ function Profile() {
               {profileData.skills.map((skill) => (
                 <div className="text-[20px]">{skill}</div>
               ))}
-              {profileData._id == userData._id && <button
-                className="min-w-[150px] h-[40px] ml-[20px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  cursor-pointer flex items-center justify-center gap-[10px] hover:bg-[#4ec1ff] transition-all hover:text-white "
-                onClick={() => setEdit(true)}
-              >
-                Add Skills
-              </button>}
-              
+              {profileData._id == userData._id && (
+                <button
+                  className="min-w-[150px] h-[40px] ml-[20px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  cursor-pointer flex items-center justify-center gap-[10px] hover:bg-[#4ec1ff] transition-all hover:text-white "
+                  onClick={() => setEdit(true)}
+                >
+                  Add Skills
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -168,13 +185,14 @@ function Profile() {
                   </div>
                 </div>
               ))}
-              {profileData._id == userData._id && <button
-                className="min-w-[150px] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  cursor-pointer flex items-center justify-center gap-[10px] hover:bg-[#4ec1ff] transition-all hover:text-white "
-                onClick={() => setEdit(true)}
-              >
-                Add Education
-              </button>}
-              
+              {profileData._id == userData._id && (
+                <button
+                  className="min-w-[150px] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  cursor-pointer flex items-center justify-center gap-[10px] hover:bg-[#4ec1ff] transition-all hover:text-white "
+                  onClick={() => setEdit(true)}
+                >
+                  Add Education
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -193,13 +211,14 @@ function Profile() {
                   </div>
                 </div>
               ))}
-              {profileData._id == userData._id && <button
-                className="min-w-[150px] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  cursor-pointer flex items-center justify-center gap-[10px] hover:bg-[#4ec1ff] transition-all hover:text-white "
-                onClick={() => setEdit(true)}
-              >
-                Add Experience
-              </button>}
-              
+              {profileData._id == userData._id && (
+                <button
+                  className="min-w-[150px] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  cursor-pointer flex items-center justify-center gap-[10px] hover:bg-[#4ec1ff] transition-all hover:text-white "
+                  onClick={() => setEdit(true)}
+                >
+                  Add Experience
+                </button>
+              )}
             </div>
           </div>
         )}

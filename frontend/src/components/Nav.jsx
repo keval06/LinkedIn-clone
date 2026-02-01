@@ -46,9 +46,10 @@ function Nav() {
     }
   };
 
+
   useEffect(() => {
-    
-      handleSearch();
+   ( searchInput && 
+      handleSearch());
   }, [searchInput]);
 
   return (

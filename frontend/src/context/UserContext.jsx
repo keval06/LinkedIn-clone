@@ -12,7 +12,7 @@ function UserContext({ children }) {
   let { serverUrl } = useContext(authDataContext);
   let [edit, setEdit] = useState(false);
   let [postData, setPostData] = useState([]);
-  let [profileData, setProfileData] = useState([]);
+  let [profileData, setProfileData] = useState(null);
   let navigate = useNavigate();
 
   const getCurrentUser = async () => {
