@@ -54,7 +54,6 @@ export const signUp = async (req, res) => {
     //token stored in cookie, signup success
     //    7. Return user data
     return res.status(201).json(user);
-
   } catch (error) {
     console.error("🔥 signUp error:", error);
     return res
@@ -76,7 +75,7 @@ export const login = async (req, res) => {
     }
 
     //check password, hashed password by bcrypt and user innput
-// 2. Compare password with hashed password
+    // 2. Compare password with hashed password
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -86,7 +85,7 @@ export const login = async (req, res) => {
     }
 
     // 3. Generate token and set cookie (same as signup)
-    //    after creating user, generate token 
+    //    after creating user, generate token
     let token = await generateToken(user._id);
     res.cookie("token", token, {
       httpOnly: true,
@@ -94,7 +93,7 @@ export const login = async (req, res) => {
       sameSite: "strict",
       secure: process.env.NODE_ENVIRONMENT === "production",
     });
-    console.log("User LoggedIn Success");
+    console.log("auth.controller.js:97 | User LoggedIn Success");
 
     return res.status(200).json(user);
     //token stored in cookie, login success

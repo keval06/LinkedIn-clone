@@ -45,7 +45,7 @@ export const getPost = async (req, res) => {
       .sort({ createdAt: -1 }); // // Latest posts first, spell mistake in profileImage
     return res.status(200).json(post);
   } catch (error) {
-    console.log(error);
+    console.log("post.controller.js:48 |", error);
     return res.status(500).json({
       message: "getPost error",
     });
@@ -90,15 +90,15 @@ export const like = async (req, res) => {
     } else {
       post.like.push(userId);
       //ehwn like, send notification
-      if(post.author != userId ){
-      let notification = await Notification.create({
-        //whom to send
-        receiver: post.author,
-        type:"like", 
-        relatedUser: userId,
-        relatedPost:postId,
-      })
-    }
+      if (post.author != userId) {
+        let notification = await Notification.create({
+          //whom to send
+          receiver: post.author,
+          type: "like",
+          relatedUser: userId,
+          relatedPost: postId,
+        });
+      }
     }
 
     //save after updating
@@ -133,7 +133,7 @@ export const comment = async (req, res) => {
       { new: true }
     ).populate("comment.user", "firstName lastName profileImage headline");
     if(post.author != userId ){
-    let notification = await Notification.create({
+      let notification = await Notification.create({
         //whom to send
         receiver: post.author,
         type:"comment", 

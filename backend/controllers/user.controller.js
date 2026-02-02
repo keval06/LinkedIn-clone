@@ -68,7 +68,7 @@ export const updateProfile = async (req, res) => {
         profileImage,
         coverImage,
       },
-      { new: true }
+      { new: true },
     ).select("-password");
 
     return res.status(200).json(user);
@@ -100,7 +100,7 @@ export const getProfile = async (req, res) => {
     //if user found, return user
     return res.status(200).json(user);
   } catch (error) {
-    console.log(error);
+    console.log("user.controller.js:103 |", error);
 
     return res.status(500).json({
       message: `get profile error ${error}`,
@@ -132,7 +132,7 @@ export const search = async (req, res) => {
 
     return res.status(200).json(users);
   } catch (error) {
-    console.log(error);
+    console.log("user.controller.js:135 |", error);
     return res.status(500).json({
       message: `searchUser error ${error}`,
     });
@@ -153,7 +153,7 @@ export const getSuggestedUser = async (req, res) => {
     }).select("-password");
     return res.status(200).json(suggestedUsers);
   } catch (error) {
-    console.log(error);
+    console.log("user.controller.js:156 |", error);
     return res.status(500).json({
       message: `suggestedUser error ${error}`,
     });

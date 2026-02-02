@@ -28,7 +28,6 @@ function Login() {
         },
         { withCredentials: true }
       );
-      console.log(result);
       setUserData(result.data);
       navigate("/");
       setErr("");

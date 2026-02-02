@@ -26,9 +26,8 @@ function Nav() {
       });
       setUserData(null); //IMP for login
       navigate("/login");
-      console.log(result);
     } catch (error) {
-      console.log(error);
+      console.log("Nav.jsx:31 |", error);
     }
   };
 
@@ -38,18 +37,16 @@ function Nav() {
         `${serverUrl}/api/user/search?query=${searchInput}`,
         {
           withCredentials: true,
-        }
+        },
       );
       setSearchData(result.data);
     } catch (error) {
-      setSearchData([])
+      setSearchData([]);
     }
   };
 
-
   useEffect(() => {
-   ( searchInput && 
-      handleSearch());
+    searchInput && handleSearch();
   }, [searchInput]);
 
   return (
@@ -74,12 +71,13 @@ function Nav() {
         )}
 
         {/* Search input */}
-        {searchData.length>0 && (
-          <div className="absolute top-[90px] min-h-[100px] left-[0px] w-[100%] lg:left-[20px] md:w-[700px]  bg-white shadow-lg flex flex-col gap-[20px] p-[20px] h-[500px] overflow-auto  "
-          >
+        {searchData.length > 0 && (
+          <div className="absolute top-[90px] min-h-[100px] left-[0px] w-[100%] lg:left-[20px] md:w-[700px]  bg-white shadow-lg flex flex-col gap-[20px] p-[20px] h-[500px] overflow-auto  ">
             {searchData.map((sea) => (
-              <div className="flex gap-[20px] items-center border-b-2 border-b-gray-300 p-[10px] cursor-pointer hover:bg-gray-200  rounded-lg"
-              onClick={()=>handleGetProfile(sea.userName)}>
+              <div
+                className="flex gap-[20px] items-center border-b-2 border-b-gray-300 p-[10px] cursor-pointer hover:bg-gray-200  rounded-lg"
+                onClick={() => handleGetProfile(sea.userName)}
+              >
                 <div className="w-[70px] h-[70px] rounded-full overflow-hidden ">
                   <img
                     src={sea.profileImage || dp}
@@ -176,8 +174,10 @@ function Nav() {
           <FaUserGroup className="w-[23px] h-[23px] text-gray-600 " />
           <div>My Network</div>
         </div>
-        <div className="flex flex-col items-center justify-cente cursor-pointer text-gray-600  "
-        onClick={()=>navigate("/notification")}>
+        <div
+          className="flex flex-col items-center justify-cente cursor-pointer text-gray-600  "
+          onClick={() => navigate("/notification")}
+        >
           <IoMdNotifications className="w-[23px] h-[23px] text-gray-600 " />
           <div className="hidden md:block ">Notifications</div>
         </div>

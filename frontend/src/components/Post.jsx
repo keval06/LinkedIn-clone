@@ -20,49 +20,6 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
   let [comments, setComments] = useState([]);
   let [showComment, setShowComment] = useState(false);
 
-  // If author was deleted from database, don't render this post
-  if (!author) {
-    return null;
-  }
-  // let [likeCount,setLikeCount] = useState("")
-
-  // handle like
-  const handleLike = async () => {
-    try {
-      let result = await axios.get(serverUrl + `/api/post/like/${id}`, {
-        withCredentials: true,
-      });
-      setLikes(result.data.like);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleComment = async (e) => {
-    e.preventDefault();
-
-    if (commentContent.trim() !== "") {
-      try {
-        let result = await axios.post(
-          serverUrl + `/api/post/comment/${id}`,
-          {
-            content: commentContent,
-          },
-          {
-            withCredentials: true,
-          },
-        );
-        setComments(result.data.comment);
-        setCommentContent("");
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      alert("Please Enter a comment");
-      setCommentContent("");
-    }
-  };
-
   useEffect(() => {
     socket.on("likeUpdated", ({ postId, likes }) => {
       if (postId == id) {
@@ -84,6 +41,48 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
     setLikes(like);
     setComments(comment);
   }, [like, comment]);
+
+  // handle like
+  const handleLike = async () => {
+    try {
+      let result = await axios.get(serverUrl + `/api/post/like/${id}`, {
+        withCredentials: true,
+      });
+      setLikes(result.data.like);
+    } catch (error) {
+      console.log("Post.jsx:53 |", error);
+    }
+  };
+
+  const handleComment = async (e) => {
+    e.preventDefault();
+
+    if (commentContent.trim() !== "") {
+      try {
+        let result = await axios.post(
+          serverUrl + `/api/post/comment/${id}`,
+          {
+            content: commentContent,
+          },
+          {
+            withCredentials: true,
+          },
+        );
+        setComments(result.data.comment);
+        setCommentContent("");
+      } catch (error) {
+        console.log("Post.jsx:58 |", error);
+      }
+    } else {
+      alert("Please Enter a comment");
+      setCommentContent("");
+    }
+  };
+
+  // If author was deleted from database, don't render this post
+  if (!author) {
+    return null;
+  }
 
   return (
     <div className="w-full min-h-[200px] bg-white rounded-lg shadow-lg p-[10px] flex flex-col gap-[20px] ">

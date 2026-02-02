@@ -8,9 +8,11 @@ import { useEffect } from "react";
 import dp from "../assets/dp.webp";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { RxCrossCircled } from "react-icons/rx";
-import io from "socket.io-client"
+import io from "socket.io-client";
 
-const socket = io(import.meta.env.MODE === "development" ? "http://localhost:5000" : undefined);
+const socket = io(
+  import.meta.env.MODE === "development" ? "http://localhost:5000" : undefined,
+);
 
 function Network() {
   let { serverUrl } = useContext(authDataContext);
@@ -25,7 +27,7 @@ function Network() {
       });
       setConnections(result.data);
     } catch (error) {
-      console.log(error);
+      console.log("Network.jsx:28 |", error);
     }
   };
 
@@ -38,13 +40,10 @@ function Network() {
         {},
         {
           withCredentials: true,
-        }
+        },
       );
       setConnections(connections.filter((con) => con._id == requestId));
-    } catch (error) {
-
-
-    }
+    } catch (error) {}
   };
 
   const handleRejectConncetion = async (requestId) => {
@@ -57,13 +56,13 @@ function Network() {
         `${serverUrl}/api/connection/reject/${requestId}`,
         {
           withCredentials: true,
-        }
+        },
       );
       // Filter out the rejected connection from the state
       // This will remove the connection from the UI without needing to refetch
       setConnections(connections.filter((con) => con._id == requestId));
     } catch (error) {
-      console.log(error);
+      console.log("Network.jsx:66 |", error);
     }
   };
 
@@ -81,7 +80,7 @@ function Network() {
         Invitations {connections.length}
       </div>
 
-      {connections.length  > 0 && (
+      {connections.length > 0 && (
         <div className="w-[100%] max-w-[900px] shadow-lg bg-white rounded-lg flex flex-col gap-[20px] min-h-[100px] ">
           {connections.map((connection, index) => (
             <div

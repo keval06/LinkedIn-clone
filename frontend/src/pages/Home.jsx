@@ -80,7 +80,6 @@ function Home() {
       let result = await axios.get(`${serverUrl}/api/user/suggestedusers`, {
         withCredentials: true,
       });
-      console.log(result.data);
       setSuggestedUser(result.data);
     } catch (error) {
       console.log(error);

@@ -12,14 +12,14 @@ const uploadOnCloudinary = async (filePath) => {
     if (!filePath) {
       return null;
     }
-    const uploadResult = await cloudinary.uploader.upload(filePath);//upload to cloudinary
+    const uploadResult = await cloudinary.uploader.upload(filePath);  //upload to cloudinary
     fs.unlinkSync(filePath); //delete from diskStorage after uploading in cloudinary
 
     return uploadResult.secure_url;
   } 
   catch (error) {
     fs.unlinkSync(filePath);
-    console.log(error);
+    console.log("cloudinary.js:22 |", error);
   }
 };
 

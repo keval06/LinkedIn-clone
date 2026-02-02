@@ -8,7 +8,9 @@ import { userDataContext } from "../context/UserContext.jsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const socket = io(import.meta.env.MODE === "development" ? "http://localhost:5000" : undefined);
+const socket = io(
+  import.meta.env.MODE === "development" ? "http://localhost:5000" : undefined,
+);
 
 function ConnectionButton({ userId }) {
   let { serverUrl } = useContext(authDataContext);
@@ -23,11 +25,11 @@ function ConnectionButton({ userId }) {
         {},
         {
           withCredentials: true,
-        }
+        },
       );
       // console.log(result);
     } catch (error) {
-      console.log(error);
+      console.log("ConnectionButton.jsx:30 |", error);
     }
   };
 
@@ -41,11 +43,11 @@ function ConnectionButton({ userId }) {
         {
           // The withCredentials option is set to true to include cookies in the request
           withCredentials: true,
-        }
+        },
       );
       // console.log(result);
     } catch (error) {
-      console.log(error);
+      console.log("ConnectionButton.jsx:48 |", error);
     }
   };
 
@@ -56,14 +58,13 @@ function ConnectionButton({ userId }) {
         // serverUrl + "/api/connection/send/" + userId
         {
           withCredentials: true,
-        }
+        },
       );
-      console.log(result);
       // Set the status based on the response from the server
       // The status can be "connect", "disconnect", "pending", or "received"
       setStatus(result.data.status);
     } catch (error) {
-      console.log(error);
+      console.log("ConnectionButton.jsx:66 |", error);
     }
   };
 
@@ -104,7 +105,9 @@ function ConnectionButton({ userId }) {
       className={`min-w-[125px] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff] text-[16px] font-semibold px-[20px] py-[15px] items-center justify-center flex ml-[20px] my-[20px] ${
         status == "connect"
           ? "hover:bg-[#4ec1ff] hover:text-white transition-all cursor-pointer"
-          : status === "pending" ? "cursor-not-allowed" : "cursor-pointer"
+          : status === "pending" 
+                    ? "cursor-not-allowed" 
+                    : "cursor-pointer"
       }`}
       onClick={handleClick}
       disabled={status == "pending"}

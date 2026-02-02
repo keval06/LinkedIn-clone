@@ -32,9 +32,8 @@ function SignUp() {
           email,
           password,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
-      console.log(result);
       setUserData(result.data);
       navigate("/");
       setLoading(false);

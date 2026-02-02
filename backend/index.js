@@ -30,12 +30,12 @@ app.use(
       "http://localhost:5173",
       "http://localhost:3000",
       "http://localhost:3001",
-      "https://linkedin-clone-pnv4.onrender.com"
+      "https://linkedin-clone-pnv4.onrender.com",
     ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
 );
 
 let port = process.env.PORT || 5000;
@@ -47,7 +47,7 @@ app.get("/api/health", (req, res) => {
   res.json({
     message: "LinkedIn Clone Backend is running!",
     timestamp: new Date().toISOString(),
-    socketConnections: userSocketMap.size
+    socketConnections: userSocketMap.size,
   });
 });
 
@@ -65,9 +65,12 @@ app.use("/api/notification", notificationRouter);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ 
-    error: 'Something went wrong!',
-    message: process.env.NODE_ENVIRONMENT === 'development' ? err.message : 'Internal server error'
+  res.status(500).json({
+    error: "Something went wrong!",
+    message:
+      process.env.NODE_ENVIRONMENT === "development"
+        ? err.message
+        : "Internal server error",
   });
 });
 // app.get("/", (req, res) => {
@@ -77,7 +80,7 @@ app.use((err, req, res, next) => {
 //     // })
 //   });
 
-  //websocket server
+//websocket server
 
 export const io = new Server(server, {
   cors: {
@@ -85,13 +88,13 @@ export const io = new Server(server, {
       "http://localhost:5173",
       "http://localhost:3000",
       "http://localhost:3001",
-      "https://linkedin-clone-pnv4.onrender.com"
+      "https://linkedin-clone-pnv4.onrender.com",
     ], // React app URL
     credentials: true,
-   methods: ["GET", "POST"],
+    methods: ["GET", "POST"],
     allowEIO3: true, // For better compatibility
   },
-   transports: ['websocket', 'polling'], // Explicitly define transports
+  transports: ["websocket", "polling"], // Explicitly define transports
   pingTimeout: 60000,
   pingInterval: 25000,
 });
@@ -99,14 +102,14 @@ export const io = new Server(server, {
 // Store user socket connections,   connection mate socket
 
 io.on("connection", (socket) => {
-  console.log("User Connected:", socket.id);
-  
+  console.log("index.js:102 | User Connected:", socket.id);
+
   // User registers their socket
   socket.on("register", (userId) => {
     if (userId) {
       userSocketMap.set(userId, socket.id);
-      console.log(`User ${userId} registered with socket ${socket.id}`);
-      console.log("Active connections:", userSocketMap.size);
+      // console.log(`User ${userId} registered with socket ${socket.id}`);
+      // console.log("Active connections:", userSocketMap.size);
     }
   });
 });
@@ -142,7 +145,7 @@ server.listen(port, async () => {
 });
 
 // For deployment platforms that expect app export
-export {app};
+export { app };
 // For local development
 // if (process.env.NODE_ENVIRONMENT !== 'production') {
 //   server.listen(port, () => {

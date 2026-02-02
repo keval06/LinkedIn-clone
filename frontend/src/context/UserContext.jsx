@@ -25,7 +25,7 @@ function UserContext({ children }) {
       setUserData(result.data);
       // console.log(result);
     } catch (error) {
-      console.log(error);
+      console.log("UserContext.jsx:28 |", error);
       setUserData(null);
     }
   };
@@ -61,7 +61,7 @@ function UserContext({ children }) {
 
       // console.log(result);
     } catch (error) {
-      console.log(error);
+      console.log("UserContext.jsx:64 |", error);
     }
   };
 

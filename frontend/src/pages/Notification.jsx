@@ -19,7 +19,7 @@ function Notification() {
       });
       setNotificationData(result.data);
     } catch (error) {
-      console.log(error);
+      console.log("Notification.jsx:22 |", error);
     }
   };
 
@@ -29,14 +29,14 @@ function Notification() {
         `${serverUrl}/api/notification/deleteone/${id}`,
         {
           withCredentials: true,
-        }
+        },
       );
       await handleGetNotification();
     } catch (error) {
-      console.log(error);
+      console.log("Notification.jsx:36 |", error);
     }
   };
-  
+
   const handleClearAllNotification = async () => {
     try {
       let result = await axios.delete(`${serverUrl}/api/notification`, {
@@ -44,7 +44,7 @@ function Notification() {
       });
       await handleGetNotification();
     } catch (error) {
-      console.log(error);
+      console.log("Notification.jsx:47 |", error);
     }
   };
 
@@ -81,7 +81,10 @@ function Notification() {
       {notificationData.length > 0 && (
         <div className="w-[100%] max-w-[900px] shadow-lg bg-white rounded-lg flex flex-col h-[100vh] overflow-auto p-[20px] ">
           {notificationData.map((noti, index) => (
-            <div key={index} className="relative border-b border-gray-200 last:border-b-0">
+            <div
+              key={index}
+              className="relative border-b border-gray-200 last:border-b-0"
+            >
               {/* Delete button positioned at top right */}
               <div
                 className="absolute top-[15px] right-[15px] cursor-pointer hover:bg-gray-100 rounded-full p-1"
