@@ -20,7 +20,7 @@ function Home() {
     edit,
     setEdit,
     postData,
-    profilkeData,
+    profileData,
     setProfileData,
     handleGetProfile,
     setPostData,
@@ -63,12 +63,15 @@ function Home() {
       let result = await axios.post(serverUrl + "/api/post/create", formData, {
         withCredentials: true,
       });
-      console.log(result);
+      // console.log(result);
       setPosting(false);
       setUploadPost(false);
+      setDescription("");
+      setBackendImage("");
+      setFrontendImage("");
     } catch (error) {
       setPosting(false);
-      console.log(error);
+      // console.log(error);
     }
   }
 

@@ -50,7 +50,7 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
           },
           {
             withCredentials: true,
-          }
+          },
         );
         setComments(result.data.comment);
         setCommentContent("");
@@ -112,7 +112,7 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
         </div>
 
         <div>
-          {userData._id !== author._id && (
+          {userData && userData._id !== author._id && (
             <ConnectionButton userId={author._id} />
           )}
         </div>
@@ -158,7 +158,7 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
         <hr className="bg-gray-500 shadow-none h-[3px]" />
         {/* comment */}
         <div className="flex justify-start items-center w-full p-[20px] gap-[20px] ">
-          {!likes.includes(userData._id) && (
+          {userData && !likes.includes(userData._id) && (
             <div
               className="flex justify-center items-center gap-[5px] cursor-pointer"
               onClick={handleLike}
@@ -168,7 +168,7 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
             </div>
           )}
 
-          {likes.includes(userData._id) && (
+          {userData && likes.includes(userData._id) && (
             <div
               className="flex justify-center items-center gap-[5px] cursor-pointer"
               onClick={handleLike}
@@ -207,34 +207,35 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
             </form>
             {/* Display / Map alll comments */}
             <div className="flex flex-col gap-[10px]">
-              {comments.map((com) => (
-                com.user && (
-                <div
-                  key={com._id}
-                  className="flex flex-col gap-[10px] border-b-2 border-b-gray-300 p-[20px] "
-                >
-                  <div className="w-full flex justify-start items-center gap-[10px] ">
-                    {/* Profile, naam */}
-                    <div className="w-[40px] h-[40px] rounded-full overflow-hidden flex items-center justify-center cursor-pointer  ">
-                      <img
-                        src={com.user.profileImage || dp}
-                        alt=""
-                        className=" h-full "
-                      />
-                    </div>
-                    {/* TIME */}
-                    <div>
-                      <div className=" text-[16px] font-semibold ">
-                        {`${com.user.firstName} ${com.user.lastName}`}
+              {comments.map(
+                (com) =>
+                  com.user && (
+                    <div
+                      key={com._id}
+                      className="flex flex-col gap-[10px] border-b-2 border-b-gray-300 p-[20px] "
+                    >
+                      <div className="w-full flex justify-start items-center gap-[10px] ">
+                        {/* Profile, naam */}
+                        <div className="w-[40px] h-[40px] rounded-full overflow-hidden flex items-center justify-center cursor-pointer  ">
+                          <img
+                            src={com.user.profileImage || dp}
+                            alt=""
+                            className=" h-full "
+                          />
+                        </div>
+                        {/* TIME */}
+                        <div>
+                          <div className=" text-[16px] font-semibold ">
+                            {`${com.user.firstName} ${com.user.lastName}`}
+                          </div>
+                          <div>{moment(com.createdAt).fromNow()}</div>
+                        </div>
                       </div>
-                      <div>{moment(com.createdAt).fromNow()}</div>
+                      {/* Content */}
+                      <div className="pl-[50px]">{com.content}</div>
                     </div>
-                  </div>
-                  {/* Content */}
-                  <div className="pl-[50px]">{com.content}</div>
-                </div>
-                )
-              ))}
+                  ),
+              )}
             </div>
           </div>
         )}

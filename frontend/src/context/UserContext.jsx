@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 
 export const userDataContext = createContext();
 import { io } from "socket.io-client";
-export let socket = io(import.meta.env.MODE === "development" ? "http://localhost:5000" : undefined);
+export let socket = io(
+  import.meta.env.MODE === "development" ? "http://localhost:5000" : undefined,
+);
 
 function UserContext({ children }) {
   let [userData, setUserData] = useState(null);
@@ -37,7 +39,9 @@ function UserContext({ children }) {
       let result = await axios.get(serverUrl + "/api/post/getpost", {
         withCredentials: true,
       });
-      setPostData(result.data);
+      if (Array.isArray(result.data)) {
+        setPostData(result.data);
+      }
       // console.log(result);
     } catch (error) {
       console.error(error);
@@ -50,7 +54,7 @@ function UserContext({ children }) {
         serverUrl + `/api/user/profile/${userName}`,
         {
           withCredentials: true,
-        }
+        },
       );
       setProfileData(result.data);
       navigate(`/profile/${userName}`);
