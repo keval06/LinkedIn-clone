@@ -205,6 +205,7 @@ function Post({ id, author, like, comment, image, description, createdAt }) {
               </button>
             </form>
             {/* Display / Map alll comments */}
+            {/* com.user && kips rendering comments where the commenter was deleted */}
             <div className="flex flex-col gap-[10px]">
               {comments.map(
                 (com) =>

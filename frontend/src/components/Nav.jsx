@@ -31,14 +31,19 @@ function Nav() {
     }
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (query) => {
+    if (!query) {
+      setSearchData([]);
+      return;
+    }
     try {
       let result = await axios.get(
-        `${serverUrl}/api/user/search?query=${searchInput}`,
+        `${serverUrl}/api/user/search?query=${query}`,
         {
           withCredentials: true,
         },
       );
+      // Only set data if the input hasn't been cleared in the meantime
       setSearchData(result.data);
     } catch (error) {
       setSearchData([]);
@@ -46,9 +51,13 @@ function Nav() {
   };
 
   useEffect(() => {
-    searchInput && handleSearch();
-    if(!searchInput) setSearchData([]); //clears results when search input is empty
-  }, [searchInput]);
+    // added userData check
+    if (userData && searchInput) {
+      handleSearch(searchInput);
+    } else {
+      setSearchData([]);
+    }
+  }, [searchInput, userData ]);
 
   return (
     <div className="w-full h-[80px] bg-[white] fixed top-0 left-0 shadow-lg flex md:justify-around justify-between items-center px-[10px] z-[80] ">
@@ -72,7 +81,8 @@ function Nav() {
         )}
 
         {/* Search input */}
-        {searchData.length > 0 && (
+        {/* added activeSearch check */}
+        {activeSearch && searchData.length > 0 && (
           <div className="absolute top-[90px] min-h-[100px] left-[0px] w-[100%] lg:left-[20px] md:w-[700px]  bg-white shadow-lg flex flex-col gap-[20px] p-[20px] h-[500px] overflow-auto  ">
             {searchData.map((sea) => (
               <div

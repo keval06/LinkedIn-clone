@@ -70,7 +70,9 @@ function ConnectionButton({ userId }) {
 
   useEffect(() => {
     // Fetch the initial status of the user when the component mounts
-    socket.emit("register", userData._id);
+    if (userData) {
+      socket.emit("register", userData._id);
+    }
     handleGetStatus();
     // Listen for status updates from the server
     // This will update the status in real-time when the server sends a status update
@@ -105,9 +107,9 @@ function ConnectionButton({ userId }) {
       className={`min-w-[125px] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff] text-[16px] font-semibold px-[20px] py-[15px] items-center justify-center flex ml-[20px] my-[20px] ${
         status == "connect"
           ? "hover:bg-[#4ec1ff] hover:text-white transition-all cursor-pointer"
-          : status === "pending" 
-                    ? "cursor-not-allowed" 
-                    : "cursor-pointer"
+          : status === "pending"
+            ? "cursor-not-allowed"
+            : "cursor-pointer"
       }`}
       onClick={handleClick}
       disabled={status == "pending"}

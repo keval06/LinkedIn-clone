@@ -125,8 +125,8 @@ function Profile() {
               <RiPencilFill className="w-[20px] h-[25px]" />
             </button>
           )}
-
-          {profileData._id !== userData._id && (
+          {/* a */}
+          {userData && profileData._id !== userData._id && (
             <div>
               <ConnectionButton userId={profileData._id} />
             </div>
@@ -159,7 +159,8 @@ function Profile() {
               {profileData.skills.map((skill) => (
                 <div className="text-[20px]">{skill}</div>
               ))}
-              {profileData._id == userData._id && (
+              {/* added userData check */}
+              {userData && profileData._id == userData._id && (
                 <button
                   className="min-w-[150px] h-[40px] ml-[20px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  cursor-pointer flex items-center justify-center gap-[10px] hover:bg-[#4ec1ff] transition-all hover:text-white "
                   onClick={() => setEdit(true)}
@@ -185,7 +186,8 @@ function Profile() {
                   </div>
                 </div>
               ))}
-              {profileData._id == userData._id && (
+              {/* added userData check */}
+              {userData && profileData._id == userData._id && (
                 <button
                   className="min-w-[150px] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff]  cursor-pointer flex items-center justify-center gap-[10px] hover:bg-[#4ec1ff] transition-all hover:text-white "
                   onClick={() => setEdit(true)}
