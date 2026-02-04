@@ -47,6 +47,7 @@ function Nav() {
 
   useEffect(() => {
     searchInput && handleSearch();
+    if(!searchInput) setSearchData([]); //clears results when search input is empty
   }, [searchInput]);
 
   return (
